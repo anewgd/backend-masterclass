@@ -7,9 +7,12 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.3
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.9.0
-	google.golang.org/grpc v1.59.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe
+	google.golang.org/grpc v1.61.0
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
 )
 
 require (
@@ -30,7 +33,8 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231120223509-83a465c0220f // indirect
+	google.golang.org/genproto v0.0.0-20240116215550-a9fa1716bcac // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
 
@@ -63,6 +67,6 @@ require (
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.32.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
