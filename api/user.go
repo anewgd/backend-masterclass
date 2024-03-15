@@ -129,7 +129,6 @@ func (server Server) loginUser(ctx *gin.Context) {
 		user.Username,
 		server.config.RefreshTokenDuration,
 	)
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errResponse(err))
 		return
