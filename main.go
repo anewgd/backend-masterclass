@@ -13,6 +13,9 @@ import (
 	"github.com/anewgd/simple-bank/gapi"
 	"github.com/anewgd/simple-bank/pb"
 	"github.com/anewgd/simple-bank/util"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -36,11 +39,26 @@ func main() {
 		log.Fatal("Cant connect to db", err)
 	}
 
+	runDBMigration(config.MigrationURL, config.DBSource)
+
 	store := db.NewStore(conn)
 
 	go runGatewayServer(config, store)
 	runGRPCServer(config, store)
 
+}
+
+func runDBMigration(migrationURL string, dbSource string) {
+	migration, err := migrate.New(migrationURL, dbSource)
+	if err != nil {
+		log.Fatal("cannot create a new migration instance: ", err)
+	}
+
+	if err := migration.Up(); err != nil && err != migrate.ErrNoChange {
+
+		log.Fatal("failed to run migrate up: ", err)
+	}
+	log.Println("Database migration successfully")
 }
 
 // func runGinServer(config util.Config, store db.Store) {
