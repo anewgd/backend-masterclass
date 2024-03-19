@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/hibiken/asynq"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -28,8 +28,6 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	statikfs "github.com/rakyll/statik/fs"
-
-	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -43,14 +41,14 @@ func main() {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	connPool, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Cant connect to db")
 	}
 
 	runDBMigration(config.MigrationURL, config.DBSource)
 
-	store := db.NewStore(conn)
+	store := db.NewStore(connPool)
 
 	redisOpt := asynq.RedisClientOpt{
 		Addr: config.RedisAddress,
@@ -64,7 +62,7 @@ func main() {
 
 }
 
-func runTaskProcessor(config util.Config,  redisOpt asynq.RedisClientOpt, store db.Store) {
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
 	mailer := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
 	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 	log.Info().Msg("start task processor")
