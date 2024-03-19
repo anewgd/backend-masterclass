@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+// Package is the way of grouping multiple 
+// protofiles with the same topic together
+package pb;
+
+//Telling the protobuf which golang package we want to generate code for
+//It should be a sub package
+option go_package = "github.com/anewgd/simple-bank/pb";
+
+message VerifyEmailRequest {
+    int64 email_id = 1;
+    string secret_code = 2;
+    
+}
+
+message VerifyEmailResponse {
+    bool is_verified = 1;
+}
+
