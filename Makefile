@@ -23,6 +23,9 @@ server:
 	go run main.go
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/anewgd/simple-bank/db/sqlc Store  
+	mockgen -package mockwk -destination worker/mock/distributor.go github.com/anewgd/simple-bank/worker TaskDistributor  
+
+
 db_docs:
 	dbdocs build doc/db.dbml
 db_schema:
